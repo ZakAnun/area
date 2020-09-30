@@ -1,0 +1,13 @@
+{
+  "name": "zak-doc",
+  "scripts": {
+    "dev": "vuepress dev .",
+    "build": "vuepress build ."
+  },
+  "dependencies": {
+    "vuepress": "^1.2.0",
+    "vuepress-plugin-container": "^2.1.1",
+    "vuepress-plugin-img-lazy": "^1.0.4",
+    "vuepress-theme-ououe": "^1.5.2"
+  }
+}
