@@ -15,7 +15,7 @@ jobs:
     - name: Checkout
     - uses: actions/checkout@master # 1、下载代码仓库
 
-    - name: vuepress-deploy # 2、rsync 推文件
+    - name: vuepress-deploy
       uses: jenkey2011/vuepress-deploy@master # vuepress github actions
       env:
         ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }} # 引用配置，SSH私钥
