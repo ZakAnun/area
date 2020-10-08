@@ -16,12 +16,19 @@ jobs:
       uses: actions/checkout@master
 
     - name: vuepress-deploy
-      uses: jenkey2011/vuepress-deploy@master # vuepress github actions
+      # uses: jenkey2011/vuepress-deploy@master # vuepress github actions
+      # env:
+      #   ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }} # 引用配置，SSH私钥
+      #   TARGET_REPO: ZakAnun/area
+      #   TARGET_BRANCH: master
+      #   SERVER_DESTINATION: /www/zakBlog/   # 部署到目标文件夹
+      #   BUILD_SCRIPT: yarn && yarn build
+      #   BUILD_DIR: .vuepress/dist/
+      uses: grasilife/github-pages-deploy-action@master
       env:
-        ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }} # 引用配置，SSH私钥
-        TARGET_REPO: ZakAnun/area
-        TARGET_BRANCH: master
-        SERVER_DESTINATION: /www/zakBlog/   # 部署到目标文件夹
-        BUILD_SCRIPT: yarn && yarn build
-        BUILD_DIR: .vuepress/dist/
+        ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        BASE_BRANCH: master # The branch the action should deploy from.
+        BRANCH: gh-pages # The branch the action should deploy to.
+        FOLDER: .vuepress/dist/ # The folder the action should deploy.
+        BUILD_SCRIPT: npm install && npm run-script build # The build script the action should run prior to deploying.
    
