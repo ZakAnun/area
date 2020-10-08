@@ -8,7 +8,7 @@ on:
       - master
     #paths-ignore: # 下列文件的变更不触发部署，可以自行添加
     #  - README.md
-    #  - LICENSE 
+    #  - LICENSE
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -17,10 +17,9 @@ jobs:
         uses: actions/checkout@master
 
       - name: Build and Deploy
-        uses: grasilife/github-pages-deploy-action@master
+        uses: JamesIves/github-pages-deploy-action@master
         env:
           ACCESS_TOKEN: ${{ secrets.ALI_YUN_DEPLOY_KEY }}
-          BASE_BRANCH: master # The branch the action should deploy from.
-          BRANCH: gh-pages
+          BRANCH: master
           FOLDER: .vuepress/dist
           BUILD_SCRIPT: npm install && npm run build
