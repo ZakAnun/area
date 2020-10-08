@@ -17,9 +17,10 @@ jobs:
         uses: actions/checkout@master
 
       - name: Build and Deploy
-        uses: JamesIves/github-pages-deploy-action@master
+        uses: grasilife/github-pages-deploy-action@master
         env:
           ACCESS_TOKEN: ${{ secrets.ALI_YUN_DEPLOY_KEY }}
-          BRANCH: release
+          BASE_BRANCH: master # The branch the action should deploy from.
+          BRANCH: gh-pages
           FOLDER: .vuepress/dist
           BUILD_SCRIPT: npm install && npm run build
