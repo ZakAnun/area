@@ -25,8 +25,8 @@ jobs:
 
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@3.6.2
-        env:
+        with:
           GITHUB_TOKEN: ${{ secrets.ALI_YUN_DEPLOY_KEY }}
-          BRANCH: gh-pages
+          BRANCH: master
           FOLDER: build
           CLEAN: true
