@@ -6,9 +6,9 @@ on:
   push:
     branches:
       - master
-    paths-ignore: # 下列文件的变更不触发部署，可以自行添加
-      - README.md
-      - LICENSE
+    #paths-ignore: # 下列文件的变更不触发部署，可以自行添加
+    #  - README.md
+    #  - LICENSE
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
