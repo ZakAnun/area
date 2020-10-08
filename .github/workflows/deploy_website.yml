@@ -14,12 +14,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@master
+        uses: actions/checkout@v2.3.1
+        with:
+          persist-credentials: false
 
-      - name: Build and Deploy
-        uses: JamesIves/github-pages-deploy-action@master
+      - name: Install and Build
+        run: |
+          npm install
+          npm run build
+
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@3.6.2
         env:
           ACCESS_TOKEN: ${{ secrets.ALI_YUN_DEPLOY_KEY }}
           BRANCH: master
-          FOLDER: .vuepress/dist
-          BUILD_SCRIPT: npm install && npm run build
+          FOLDER: build
+          CLEAN: true
