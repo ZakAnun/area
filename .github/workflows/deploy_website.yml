@@ -26,7 +26,7 @@ jobs:
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@3.6.2
         env:
-          ACCESS_TOKEN: ${{ secrets.ALI_YUN_DEPLOY_KEY }}
+          GITHUB_TOKEN: ${{ secrets.ALI_YUN_DEPLOY_KEY }}
           BRANCH: master
           FOLDER: build
           CLEAN: true
