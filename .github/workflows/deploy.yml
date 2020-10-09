@@ -29,5 +29,5 @@ jobs:
           PASSWORD: ${{ secrets.ALI_YUN_PASSWORD }}
           HOST: ${{ secrets.ALI_YUN_HOST }}
           PORT: 22
-          SOURCE: '/.vuepress/dist/'
+          SOURCE: 'dist'
           TARGET: '/www/blog'
