@@ -10,7 +10,7 @@
         />
       </div>
       <div class="beian-item">
-        <img src="/beian.png"/>
+        <img src="/img/beian.png"/>
         <nav-link
           :key="1000"
           :value="{ text: '粤公网安备 44030502005986号',

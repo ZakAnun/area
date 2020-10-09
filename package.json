@@ -2,6 +2,7 @@
   "name": "zak-doc",
   "version": "1.0.00001",
   "description": "self blog",
+  "author": "zak <linhenji17@gmail.com>",
   "scripts": {
     "dev": "vuepress dev .",
     "build": "vuepress build ."
@@ -11,5 +12,6 @@
     "vuepress-plugin-container": "^2.1.1",
     "vuepress-plugin-img-lazy": "^1.0.4",
     "vuepress-theme-ououe": "^1.5.2"
-  }
+  },
+  "license": "CC BY-NC-SA 4.0"
 }
