@@ -1,5 +1,7 @@
 {
   "name": "zak-doc",
+  "version": "1.0.00001",
+  "description": "self blog",
   "scripts": {
     "dev": "vuepress dev .",
     "build": "vuepress build ."
