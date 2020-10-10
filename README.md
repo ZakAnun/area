@@ -1,1 +1,13 @@
-root markdown
+## ZakAnun Area
+
+- 记录技术、记录想法
+
+- [使用Vuepress-theme-ouout](https://github.com/tolking/vuepress-theme-ououe)
+
+- [基于Vuepress](https://github.com/vuejs/vuepress)
+
+- [点击查看](https://www.zakli.cn/)
+
+## License
+
+- [Attribution-NonCommercial-ShareAlike 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode)
