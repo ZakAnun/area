@@ -78,8 +78,8 @@ module.exports = {
       platform: 'github',
       owner: 'ZakAnun',
       repo: 'area',
-      clientId: '${{ secrets.OAUTH_CLIENT_ID }}',
-      clientSecret: '${{ secrets.OAUTH_CLIENT_SECRET }}'
+      clientId: '3935698d7c02cb14b2d4',
+      clientSecret: '77d1ca5a159d70a5f0034ac272c95861f0fa5bc5'
     }],
     // add vuepress-plugin-sitemap
     ['sitemap', {
