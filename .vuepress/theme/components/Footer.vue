@@ -19,9 +19,12 @@
         />
       </div>
     </nav>
-    <router-link :to="$localePath" class="copyright">{{
+    <router-link :to="$localePath" class="copyright">
+      <img src="/img/cc-logo.png" class="lisence-img"/>
+      {{
       $site.title + ' &copy; 2019 - ' + new Date().getFullYear()
-    }}</router-link>
+      }}
+    </router-link>
   </footer>
 </template>
 
@@ -54,10 +57,15 @@ export default {
       justify-content center
       margin-bottom .75rem
   .copyright
-    display inline-block
+    display flex
+    justify-content center
     margin-top .55rem
     font-size .7rem
     color #fff
+  .lisence-img
+    width 2.5rem
+    height auto
+    margin-right .5rem
   @media print
     display none
 </style>
