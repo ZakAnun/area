@@ -30,7 +30,7 @@ module.exports = {
       { text: '关于', link: '/about/' }
     ],
     footer: [
-      { text: '粤ICP备19159883号-1', link: 'https://beian.aliyun.com/pcContainer/myorder' },
+      { text: '粤ICP备19159883号-1', link: 'https://beian.miit.gov.cn/?spm=a2c4g.11186623.2.12.54cb7638QYqCah#/Integrated/recordQuery' },
       { text: 'ZakAnun', link: ''},
       { text: 'Github', link: 'https://github.com/ZakAnun' },
       { text: 'Base vuepress-theme-ououe', link: 'https://github.com/tolking/vuepress-theme-ououe' }
@@ -78,8 +78,8 @@ module.exports = {
       platform: 'github',
       owner: 'ZakAnun',
       repo: 'area',
-      clientId: '3935698d7c02cb14b2d4',
-      clientSecret: '77d1ca5a159d70a5f0034ac272c95861f0fa5bc5'
+      clientId: '${{ secrets.OAUTH_CLIENT_ID }}',
+      clientSecret: '${{ secrets.OAUTH_CLIENT_SECRET }}'
     }],
     // add vuepress-plugin-sitemap
     ['sitemap', {
