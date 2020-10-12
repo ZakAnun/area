@@ -21,6 +21,7 @@ module.exports = {
   themeConfig: {
     cover: '/img/night.jpg',
     backgroundImage: false,
+    useVssue: true,
     nav: [
       { text: '首页', link: '/' },
       { text: '安卓', link: '/android/' },
@@ -29,7 +30,7 @@ module.exports = {
       { text: '关于', link: '/about/' }
     ],
     footer: [
-      { text: '粤ICP备19159883号-1', link: '' },
+      { text: '粤ICP备19159883号-1', link: 'https://beian.aliyun.com/pcContainer/myorder' },
       { text: 'ZakAnun', link: ''},
       { text: 'Github', link: 'https://github.com/ZakAnun' },
       { text: 'Base vuepress-theme-ououe', link: 'https://github.com/tolking/vuepress-theme-ououe' }
@@ -37,6 +38,13 @@ module.exports = {
   },
   markdown: {
     lineNumbers: true
+  },
+  postcss: {
+    plugins: [
+      require('postcss-propro'),
+      require('postcss-flex-alias'),
+      require('autoprefixer')
+    ]
   },
   plugins: [
     // permalink for posts
@@ -64,6 +72,26 @@ module.exports = {
       type: 'danger',
       before: info => `<div class="danger"><p class="title">${info}</p>`,
       after: '</div>'
+    }],
+    // add @vssue/vuepress-plugin-vssue
+    ['@vssue/vuepress-plugin-vssue', {
+      platform: 'github',
+      owner: 'ZakAnun',
+      repo: 'area',
+      clientId: '3935698d7c02cb14b2d4',
+      clientSecret: '77d1ca5a159d70a5f0034ac272c95861f0fa5bc5'
+    }],
+    // add vuepress-plugin-sitemap
+    ['sitemap', {
+      hostname: 'https://zakli.cn',
+      changefreq: 'weekly'
+    }],
+    // add pwa
+    ['@vuepress/pwa', {
+      updatePopup: {
+        message: '发现新内容可用',
+        buttonText: '刷新'
+      }
     }]
   ]
 }
