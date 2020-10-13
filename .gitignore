@@ -1,0 +1,13 @@
+.DS_Store
+.npmignore
+.editorconfig
+
+node_modules/
+dist/
+test/
+npm-debug.log
+yarn-error.log
+yarn.lock
+package-lock.json
+
+*.test.js
