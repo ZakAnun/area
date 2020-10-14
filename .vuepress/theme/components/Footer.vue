@@ -64,7 +64,7 @@ export default {
     color #fff
   .lisence-img
     width 2.5rem
-    height auto
+    height 1rem
     margin-right .5rem
   @media print
     display none
