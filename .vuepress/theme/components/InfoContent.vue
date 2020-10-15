@@ -2,6 +2,7 @@
   <article class="main info-content">
     <div class="content-header">
       <h1 class="header-title">{{ $page.title }}</h1>
+      <valine v-show="visibleValine" class="u-valine-wrap"/>
     </div>
     <div v-if="categories.length || tags.length" class="flex-wcc content-tag">
       <div v-if="categories.length" class="inblock tag-list">
@@ -44,8 +45,12 @@
 
 <script>
 import { getCategories, getTags } from '@theme/lib/util'
+import Valine from './Valine'
 export default {
   name: 'InfoContent',
+  components: {
+    Valine
+  },
   computed: {
     categories() {
       return getCategories(this.$frontmatter)
@@ -61,6 +66,20 @@ export default {
     },
     postTime() {
       return this.$themeConfig.postTime
+    }
+  },
+  data() {
+    return {
+      visibleValine: true
+    }
+  },
+  watch: {
+    $route: {
+      handler (to, from) {
+        let isHide = this.$themeConfig.hideValinePaths.includes(to.path)
+        this.visibleValine = !isHide
+      },
+      immediate: true
     }
   },
   methods: {

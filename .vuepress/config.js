@@ -14,7 +14,7 @@ module.exports = {
     ['meta', { name: 'applicable-device', content: 'pc,mobile' }],
     ['meta', { name: 'author', content: 'zak <linhenji17@gmail.com>' }],
     ['meta', { name: 'copyright', content: '网站内容版权所有，转载请注明出处' }],
-    ['meta', { name: "keywords", content: "日常划水, 博客总结, 安卓开发, zakli.cn" }]
+    ['meta', { name: 'keywords', content: '日常划水, 博客总结, 安卓开发, zakli.cn' }]
   ],
   locales: { '/': { lang: 'zh-CN' }},
   theme: 'ououe',
@@ -35,6 +35,9 @@ module.exports = {
       { text: 'ZakAnun', link: ''},
       { text: 'Github', link: 'https://github.com/ZakAnun' },
       { text: 'Base vuepress-theme-ououe', link: 'https://github.com/tolking/vuepress-theme-ououe' }
+    ],
+    hideValinePaths: [
+      'https://www.zakli.cn/'
     ]
   },
   markdown: {

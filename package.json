@@ -1,5 +1,5 @@
 {
-  "name": "zak-doc",
+  "name": "zak-area",
   "version": "1.0.00001",
   "description": "self blog",
   "author": "zak <linhenji17@gmail.com>",
@@ -19,7 +19,9 @@
     "postcss-flex-alias": "^1.0.0",
     "postcss-propro": "^1.0.2",
     "vuepress-plugin-container": "^2.1.2",
-    "vuepress-plugin-sitemap": "^2.3.1"
+    "vuepress-plugin-sitemap": "^2.3.1",
+    "leancloud-storage": "^4.7.0",
+    "valine": "^1.4.14"
   },
   "license": "CC BY-NC-SA 4.0"
 }
