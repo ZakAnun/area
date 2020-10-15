@@ -1,8 +1,8 @@
 <template>
     <div class="u-valine">
-      <span id="{{$page.relativePath}}"
+      <span :id="$page.relativePath"
             class="leancloud_visitors"
-            data-flag-title="{{$page.title}}">
+            :data-flag-title="$page.title">
         <span class="stat read-count content">
             <em class="post-meta-item-text">阅读量: </em>
             <i class="leancloud-visitors-count"></i>
