@@ -3,7 +3,7 @@
       <span id="{{$page.relativePath}}"
             class="leancloud_visitors"
             data-flag-title="{{$page.title}}">
-        <span class="stat read-count">
+        <span class="stat read-count content">
             <em class="post-meta-item-text">阅读量: </em>
             <i class="leancloud-visitors-count"></i>
         </span>
@@ -89,5 +89,10 @@ export default {
 
 .stat:last-child::after {
     content: " ";
+}
+
+.content {
+    color: #eaecef;
+    text-shadow: 0 1px 5px rgba(0,0,0,.3);
 }
 </style>
