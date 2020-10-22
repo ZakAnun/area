@@ -28,6 +28,6 @@ jobs:
           USERNAME: ${{ secrets.ALI_YUN_USERNAME }}
           PASSWORD: ${{ secrets.ALI_YUN_PASSWORD }}
           HOST: ${{ secrets.ALI_YUN_HOST }}
-          PORT: 22
-          SOURCE: 'dist'
-          TARGET: '/www/blog'
+          PORT: ${{ secrets.ALI_YUN_PORT }}
+          SOURCE: ${{ secrets.ALI_YUN_SOURCE }}
+          TARGET: ${{ secrets.ALI_YUN_TARGET }}
