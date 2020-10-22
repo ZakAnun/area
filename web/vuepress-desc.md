@@ -36,7 +36,7 @@ categories:
 
 ---
 
-### 遇到的问题
+### 问题
 1、修改默认主题<br/>
 在中文文档里面有提及，通过继承的方式可以改变默认的主题，并且同名的组件会覆盖被继承的主题组件，这个操作在 [index.js](https://github.com/ZakAnun/area/blob/master/.vuepress/theme/index.js) 文件下面完成<br/>
 2、资源路径问题<br/>
