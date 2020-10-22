@@ -37,11 +37,11 @@ categories:
 ---
 
 ### 问题
-1、修改默认主题<br/>
+- 修改默认主题<br/>
 在中文文档里面有提及，通过继承的方式可以改变默认的主题，并且同名的组件会覆盖被继承的主题组件，这个操作在 [index.js](https://github.com/ZakAnun/area/blob/master/.vuepress/theme/index.js) 文件下面完成<br/>
-2、资源路径问题<br/>
+- 资源路径问题<br/>
 vuepress 会根据 [config.js](https://github.com/ZakAnun/area/blob/master/.vuepress/config.js) 中 base 和 dist 所指定的值作为查询标准，base 默认指向 .vuepress，因此在放置图片资源的是否可以在 .vuepress 目录下进行操作<br/>
-3、运行环境问题<br/>
+- 运行环境问题<br/>
 参考 [前端开发环境配置](https://www.zakli.cn/web/web-env.html) 进行处理<br/>
 
 ---

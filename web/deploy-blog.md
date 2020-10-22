@@ -32,9 +32,9 @@ categories:
 ---
 
 ### 问题
-1、github 与服务器进行交互的方式
+- github 与服务器进行交互的方式
 最终选择了 [hengkx/ssh-deploy](https://github.com/hengkx/ssh-deploy) 所需要的参数是服务器的公网地址、用户名、密码、端口、编译后目录、服务器的目标目录，这些数据都可以通过 github 上的仓库 -> Settings -> Secrets 进行创建（具体的值是自己服务器相应的数据），使用方式: .yml 文件中指定对应的值<br/>
-2、编译后的目录是根在 .vuepress/config.js 下的 dist: 'dist dir' 指定的
+- 编译后的目录是根在 .vuepress/config.js 下的 dist: 'dist dir' 指定的
 
 ---
 
