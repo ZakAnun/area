@@ -1,5 +1,5 @@
 ---
-title: 部署博客
+title: （三）基于 Vuepress 搭建个人博客之部署到服务器
 display: home
 description: deploy blog desc
 image: https://picsum.photos/536/354?random&date=2020-10-20
@@ -12,6 +12,10 @@ categories:
 ---
 
 ### 概述
+#### 这是基于 Vuepress 搭建的博客，其他两篇:
+
+[（一）基于 Vuepress 搭建个人博客之前端开发环境配置](https://www.zakli.cn/web/web-env.html)<br/>
+[（二）基于 Vuepress 搭建个人博客之 Vuepress 基本配置](https://www.zakli.cn/web/vuepress-desc.html)
 
 经过搭建，博客的文件已经能够顺利在本地跑起来，最后就剩下将他部署到服务器中，开始的时候，我是直接在本地执行 build 命令，然后将生成的文件 push 到 github 上，最后在服务器上面拉 github 的文件到服务器上对应的目录，开始需要手动执行的脚本还挺多，后来 [朋友](https://www.keeplovepet.cn/) 介绍我说可以在服务器上开个定时脚本，然后定期拉 github 的项目，我们只需要关注 push 操作就可以，其实也挺不错（具体可以去看看他的总结），最终我并没有采用这种方案，因为无意中了解到一个 github 的一个功能 [Github Action](https://docs.github.com/cn/free-pro-team@latest/actions)，看起来挺优秀，它能够帮助我们完成一些常规的、可被复用的工作流程，然后就尝试去了解并且用上这个功能，具体介绍可以在官方文档了解~<br/>
 再说一下我用到的服务器: 阿里云（域名也是在这上面申请的，备案啥的都在上面完成了，就是 [公安备案](http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=44030502005986) 需要在另外的网站上完成，配置好服务器的出入端口、域名访问和 nginx 之后，直接通过域名能够访问到默认的 CentOS 页面就证明可以了，具体的操作可以自行搜一下，都是简单的配置，如果这部分有疑问的话欢迎评论一起讨论。<br/>
