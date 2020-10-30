@@ -2,7 +2,7 @@
 
 - 记录技术、记录想法
 
-- [使用Vuepress-theme-ouout](https://github.com/tolking/vuepress-theme-ououe)
+- [使用Vuepress-theme-ououe](https://github.com/tolking/vuepress-theme-ououe)
 
 - [基于Vuepress](https://github.com/vuejs/vuepress)
 
