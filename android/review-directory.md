@@ -17,6 +17,7 @@ categories:
 	- 三方授权的过程
 - 操作系统
 - 数据结构
+- JVM
 
 ### Android 基础知识
 - 动画
