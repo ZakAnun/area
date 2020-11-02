@@ -1,5 +1,5 @@
 ---
-title: Vuepress 基本配置
+title: （二）基于 Vuepress 搭建个人博客之 Vuepress 基本配置
 display: home
 description: vuepress basic desc
 image: https://picsum.photos/536/354?random&date=2020-10-15
@@ -12,6 +12,12 @@ categories:
 ---
 
 ### 概述
+
+#### 这是基于 Vuepress 搭建的博客，其他两篇:
+
+[（一）基于 Vuepress 搭建个人博客之前端开发环境配置](https://www.zakli.cn/web/web-env.html)<br/>
+[（三）基于 Vuepress 搭建个人博客之部署博客](https://www.zakli.cn/web/deploy-blog.html)
+
 之前有接触过一些前端的开发，用的技术是 vue，后来发现有 Vuepress 这个可以生成文档的工具，也看到很多开发者都使用它来形成自己的博客，所以就准备用 Vuepress 完成博客的搭建，基本配置跟官网上的教程类似，如果想要多了解一下 Vuepress，可以到 [中文网](http://caibaojian.com/vuepress/) 了解
 
 ---

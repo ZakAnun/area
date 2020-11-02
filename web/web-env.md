@@ -1,5 +1,5 @@
 ---
-title: 前端开发环境配置
+title: （一）基于 Vuepress 搭建个人博客之前端开发环境配置
 display: home
 description: env set up
 image: https://picsum.photos/536/354?random&date=2020-10-13
@@ -12,8 +12,14 @@ categories:
 ---
 
 ### 概述
+#### 这是基于 Vuepress 搭建的博客，其他两篇:
+
+[（二）基于 Vuepress 搭建个人博客之 Vuepress 基本配置](https://www.zakli.cn/web/vuepress-desc.html)<br/>
+[（三）基于 Vuepress 搭建个人博客之部署博客](https://www.zakli.cn/web/deploy-blog.html)
+
 本篇主要记录前端开发环境的配置，环境配置好后，做前端相关的开发都会比较舒服，由于是为了能够基于 Vuepress 搭建博客进行的，因此主要是 nvm、 node、npm、yarn 等工具的安装。
 首先简单介绍一下这几个工具
+
 - nvm(Node Version Manager): 用于管理不同版本的 node 和 npm
 - node: js 运行时
 - npm(Node Package Manager): node 包管理器
