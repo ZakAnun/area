@@ -64,7 +64,7 @@ yarn -v
 ### 问题
 - 在 linux 上安装没什么问题，可能是在 mac 装过一遍的原因....
 - mac 上遇到的问题:<br/>
-1、在安装 brew 的时候网络不同（有梯子）
+1、在安装 brew 的时候网络不通（有梯子）
 直接在终端输入 `export https_proxy=http://127.0.0.1:7890 http_proxy=http://127.0.0.1:7890 all_proxy=socks5://127.0.0.1:7890` 这里的 7890 是梯子的端口号，可以在梯子工具中查看
 2、如果在安装过程中遇到了问题可以直接考虑重装...<br/>
 [重装方法]("https://yamdestiny.xyz/2019/04/24/how-to-reinstall-node-js-on-mac/") 需要删干净之前已安装的文件
