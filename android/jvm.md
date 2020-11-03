@@ -33,7 +33,7 @@ brew cask install adoptopenjdk
 ```
 bash configure --with-target-bits=64 --enable-ccache --with-jvm-variants=server,client --disable-warnings-as-errors --with-debug-level=fastdebug 2>&1 | tee configure_mac_x64.log
 ```
-4、执行 make images 进行编译
+4、执行 make images 进行编译<br/>
 5、编译完成后到 jdk 的 build 目录下验证编译后的 jdk 版本，路径 `./build/*/jdk/bin/`，使用该目录下的 java 命令查看 version，一般是 root jdk version +1
 #### 问题
 都是在执行 bash configure 这个命令提示的问题，只需要逐条解决即可<br/>
