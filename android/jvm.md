@@ -41,5 +41,6 @@ bash configure --with-target-bits=64 --enable-ccache --with-jvm-variants=server,
 2、configure: error: No xcodebuild tool and no system framework headers found -> 执行 sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer<br/>
 3、Could not find a valid Boot JDK -> 执行 brew cask install adoptopenjdk<br/>
 4、command: cask not found -> 执行 brew install cask<br/>
+5、此外如果在执行上述步骤过程中有遇到其他问题，应该可以根据提示解决，因此需要关注每次执行的结果~<br/>
 #### 结果
 经过上述配置，可以成功编译 jdk
