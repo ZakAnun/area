@@ -17,7 +17,7 @@ categories:
 	- 三方授权的过程
 - 操作系统
 - 数据结构
-- JVM
+- [JVM](https://www.zakli.cn/android/jvm.html)
 
 ### Android 基础知识
 - 动画
