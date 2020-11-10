@@ -1,5 +1,5 @@
 ---
-title: JVM 笔记
+title: JVM 笔记（《深入理解 Java 虚拟机》）
 description: jvm note
 image: https://picsum.photos/536/354?random&date=2020-11-02
 date: 2020-11-02
