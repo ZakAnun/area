@@ -73,7 +73,7 @@ bash configure --with-target-bits=64 --enable-ccache --with-jvm-variants=server,
 5、Java 虚拟机内部的引用（如: 基本数据类型对应的 Class 对象，一些常驻的异常对象（NullPointException、OutOfMemoryError ）等，还有系统类加载器<br/>
 6、所有被同步锁（synchronized 关键字）持有的对象<br/>
 7、反映 Java 虚拟机内部情况的 JMXBean、JVMTI 中注册的回调、本地代码缓存等<br/>
-此外，还可以有其他对象临时性加入（在不同的内存区域）共同构成完整 GC Roots 集合
+此外，还可以有其他对象临时性加入（在不同的内存区域）共同构成完整 GC Roots 集合<br/>
 - **对象死亡过程**<br/>
 一个对象死亡，至少要经历两次标记过程: 如果对象在进行可达性分析后发现没有与 GC Roots 相连接的引用链，那它将会被第一次标记，随后进行一次筛选，条件是此对象是否有必要执行 finalize()，若对象没有覆盖 finalize() 或 finalize() 已被虚拟机调用过，那么虚拟机将这两种情况都视为“没有必要执行”，如果判定为有必要执行 finalize() 那么该对象将会被放置在一个名为 F-Queue 的队列中，并在稍后由一条由虚拟机自动建立的、低调度优先级的 Finalizer 线程去执行它们的 finalize()，虚拟机会触发 finalize() 开始运行，但不承诺要等待它运行结束，是因为如果某个对象的 finalize() 执行缓慢或者发生死循环，将会可能导致 F-Queue 队列中的其他对象永久处于等待，甚至导致整个内存回收子系统崩溃。<br/>
 - **回收方法区**<br/>
@@ -97,10 +97,8 @@ bash configure --with-target-bits=64 --enable-ccache --with-jvm-variants=server,
 4、动态对象年龄判定（虚拟机会结合对象大小总和与 Survivor 空间（担保）大小进行判断）<br/>
 5、空间分配担保（就是判断老年代能否需要进行 GC 来配合新的对象进入老年代）<br/>
 
-### 类文件结构
-- **Class 类文件的结构**<br/>
-Class 文件是一组以 8 个字节为基础单位的二进制流（没有任何分隔符号，存储的内容几乎全是程序运行的必要数据，如果超过 8 个字节会按高位在前的方式分割成若干个 8 个字节进行存储）<br/>
-每个 Class 文件的头 4 个字节被称为**魔数（Magic Number）**，唯一作用是确定这个文件是否为一个能被虚拟机接受的 Class 文件（这种方式也被应用在其他格式的文件中，Java 的魔数取值为 0xCAFEBABE），紧跟魔数的 4 个字节存储的是 Class 文件的版本号，第 5 、 6 个字节是**次版本号（Minor Version）**，第 7、8个字节是**主版本号（Major Version）**（虚拟机会拒绝执行超过其版本号的 Class 文件），主、次版本号之后的是常量池入口，
+### 虚拟机类加载机制
+
 
 
 
