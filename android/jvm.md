@@ -167,6 +167,8 @@ volatile 变量规则（Volatile Variable Rule）: 对一个 volatile 变量的�
 对象终结规则（Finalized Rule）: 一个对象的初始化完成（构造函数执行结束）先行发生于它的 finalize() 方法的开始。<br/>
 传递性（Transitivity）: 如果操作 A 先行发生于操作 B，操作 B 先行发生于操作 C，那就可以得出操作 A 先行发生于操作 C 的结论。<br/>
 需要注意的是时间先后顺序与先行发生原则之间基本没有因果关系，所以衡量并发安全问题的时候不要受时间顺序的干扰，一切须以先行发生原则为准。<br/>
+- **线程的实现**: Java 中每个已经调用过 start() 且还未结束的 java.lang.Thread 类的实例就代表一个线程。以通用的应用程序的角度来说，实现线程的三种方式: 使用内核线程实现（1:1 实现），使用用户线程实现（1:N 实现），使用用户线程加轻量级进行混合实现（N:M 实现）。
+- **Java 线程调度**: 指系统为线程分配处理器使用权的过程，主要方式分别是协同式（Cooperative Thread-Scheduling）线程调用和抢占式（Preemptive Threads-Scheduling）线程调度。
 
 
 
