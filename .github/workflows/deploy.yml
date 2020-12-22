@@ -32,7 +32,7 @@ jobs:
             ${{ runner.os }}-yarn-
 
       - name: Install and Build
-        run: yarn && yarn run build
+        run: yarn cache clean && yarn install && yarn run build
 
       - name: Deploy to Server
         uses: hengkx/ssh-deploy@v1.0.1
