@@ -20,7 +20,7 @@ jobs:
           node-version: '12.x'
 
       - name: Install and Build
-        run: yarn && yarn build
+        run: yarn cache clean && yarn && yarn build
 
       - name: Deploy to Server
         uses: hengkx/ssh-deploy@v1.0.1
