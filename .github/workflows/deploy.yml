@@ -32,7 +32,7 @@ jobs:
             ${{ runner.os }}-yarn-
             
       - name: Yarn Clean Cache
-        run: yarn clean cache
+        run: yarn cache clean
 
       - name: Install and Build
         run: yarn && yarn build
