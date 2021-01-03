@@ -31,8 +31,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-yarn-
 
+      - name: Install babel runtime
+        run: yarn add babel-runtime --save
+
       - name: Install and Build
-        run: yarn cache clean && yarn add babel-runtime --save && yarn install && yarn build
+        run: yarn install && yarn build
 
       - name: Deploy to Server
         uses: hengkx/ssh-deploy@v1.0.1
