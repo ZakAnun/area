@@ -14,7 +14,8 @@ module.exports = {
     ['meta', { name: 'applicable-device', content: 'pc,mobile' }],
     ['meta', { name: 'author', content: 'zak <linhenji17@gmail.com>' }],
     ['meta', { name: 'copyright', content: '网站内容版权所有，转载请注明出处' }],
-    ['meta', { name: 'keywords', content: '日常划水, 博客总结, 安卓开发, zakli.cn' }]
+    ['meta', { name: 'keywords', content: '日常划水, 博客总结, 安卓开发, zakli.cn' }],
+    ['meta', { name: 'msapplication-TileColor', content: '#000000' }]
   ],
   locales: { '/': { lang: 'zh-CN' }},
   theme: 'ououe',
@@ -92,9 +93,10 @@ module.exports = {
     }],
     // add pwa
     ['@vuepress/pwa', {
+      serviceWorker: true,
       updatePopup: {
-        message: '发现新内容可用',
-        buttonText: '刷新'
+        message: "发现新内容可用",
+        buttonText: "刷新"
       }
     }]
   ]
