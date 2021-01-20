@@ -43,4 +43,3 @@ jobs:
           PORT: ${{ secrets.ALI_YUN_PORT }}
           SOURCE: ${{ secrets.ALI_YUN_SOURCE }}
           TARGET: ${{ secrets.ALI_YUN_TARGET }}
-          AFTER_COMMAND: 'npm run stop && npm install --production && npm run start'
