@@ -28,7 +28,7 @@
     "vuepress-plugin-sitemap": "^2.3.1",
     "leancloud-storage": "^4.10.0",
     "valine": "^1.4.14",
-    "core-js": "^3.8.3"
+    "core-js": "^2.4.0"
   },
   "devDependencies": {
     "@vue/eslint-config-prettier": "^4.0.1",
