@@ -6,7 +6,7 @@
 
 - [基于Vuepress](https://github.com/vuejs/vuepress)
 
-- [点击查看](https://www.zakli.cn/) 
+- [点击查看](https://www.zakli.cn/)
 
 ## License 
 
