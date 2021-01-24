@@ -1,6 +1,6 @@
 ## ZakAnun Area
 
-- 记录技术、记录想法 
+- 记录技术、记录想法
 
 - [使用Vuepress-theme-ououe](https://github.com/tolking/vuepress-theme-ououe)
 
