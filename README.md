@@ -8,6 +8,6 @@
 
 - [点击查看](https://www.zakli.cn/)
 
-## License 
+## License
 
 - [CC-4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode)
