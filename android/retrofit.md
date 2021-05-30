@@ -47,6 +47,7 @@ Call<List<Repo>> repos = service.listRepos("octocat");
 ### 基础 API
 **URL 声明**
 url 声明可以动态更新可以被替换的部分，在注解中可以被替换的部分需要被 { 和 } 包裹，替换的值需要使用 @Path 进行声明，同时也支持添加请求参数
+
 ```
 // 示例代码（接口中的代码）
 
@@ -94,10 +95,52 @@ Call<User> updateUser(@Field("first_name") String first, @Field("last_name") Str
 @PUT("user/photo")
 Call<User> updateUser(@Part("photo") RequestBody photo, @Part("description") RequestBody description);
 ```
-
 **请求头声明**
+开发者可以使用 @Headers 来设置头部信息，头部信息不回被重写，所有头部信息都会包含在请求头中。同样的，请求头也可以使用 @Header 来动态添加，如果 @Header 传入的值为 null 的时候，那他就会被省略，如果不想被省略可以使用 toString 避免传入 null
+```
+// 示例代码
 
+@Headers("Cache-Control: max-age=640000")
+@GET("widget/list")
+Call<List<Widget>> widgetList();
+
+@Headers({
+	"Accept: application/vnd.github.v3.full+json",
+	"User-Agent: Retrofit-Sample-App"
+})
+@GET("users/{username}")
+Call<User> getUser(@Path("username") String username);
+
+@GET("user")
+Call<User> getUser(@Header("Authorization" String authorization))
+
+@GET("users")
+Call<User> getUser(@HeaderMap Map<String, String> headers)
+```
 **同步和异步**
+Call 实例可以被同步执行和异步执行，每个 Call 示例只会被使用一次，但使用 clone() 将创建一个新的能够被使用的示例
+在 Android 中，网络回调将会在主线程被执行。在 JVM 中，回调将会在同一个线程中被执行
+
+### Retrofit 配置
+Retrofit 是将 API 接口转换为可调用对象的类。默认情况下，Retrofit 将为使用的平台提供合理的默认配置，同时支持自定义。
+默认情况下，Retrofit 只能将 HTTP 响应体反序列化为 OkHttp 的 ResponseBody 类型，并且只能接收 @Body 的 RequestBody 类型。
+但添加 Converters 可以支持其它的类型，提供以下转换器（Gson、Jackson、Moshi、Protoful、Wire、Simple XML、JAXB、Scalars）
+```
+// 示例代码
+
+Retrofit retrofit = new Retrofit.Builder()
+		.baseUrl("https://api.github.com/")
+		.addConverterFactory(GsonConverterFactory.create())
+		.build();
+		
+GitHubService service = retrofit.create(GitHubService.class);
+```
+此外，可以继承 Converter.Factory 这个类来自定义转换器来适配开发者的需求
+
+
+
+
+
 
 
 
