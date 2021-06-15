@@ -131,17 +131,96 @@ Retrofit 是将 API 接口转换为可调用对象的类。默认情况下，Ret
 ```
 // 示例代码
 
+// 配置
 Retrofit retrofit = new Retrofit.Builder()
 		.baseUrl("https://api.github.com/")
 		.addConverterFactory(GsonConverterFactory.create())
 		.build();
 		
+// 创建与使用
 GitHubService service = retrofit.create(GitHubService.class);
+service.listRepos("zak");
 ```
 此外，可以继承 Converter.Factory 这个类来自定义转换器来适配开发者的需求
 
 ### 基础篇小结
-以上内容，就是 Retrofit 文档里告诉开发者的一些基本用法，这个库目前也是我最常使用的网络请求库了，那必须是简单了解一下它是怎么实现将 HTTP 请求封装成开发者所熟悉使用的接口？又是怎样开启网络请求？带着这俩疑问开始源码篇
+以上内容，就是 Retrofit 文档里告诉开发者的一些基本用法，这个库目前也是我最常使用的网络请求库了，那必须是简单了解一下它是怎么实现将 HTTP 请求封装成开发者所熟悉使用的接口？又是怎样开启网络请求？带着这俩疑问准备开始源码篇
+
+### 源码篇
+**基本方式**<br/>
+源码的阅读，一般先从调用入口开始追踪，逐步捋清调用链，如果从调用入口的方法中获取到的信息比较少，那就从构造的方法开始着手。总之创建、配置、调用，基本上就是这些（有些细节实现的地方，了解阶段应该跳过，不要阻塞对整个的了解~）。
+先看 Retrofit 的配置，通过构造 Builder 传入所需的参数，那这个就先跳过。再看使用，通过 Retrofit 的实例，调用 create(*.class) 并传入接口的 class 对象（Class 对象用于记录类的成员、接口等信息），从 create 开始逐步了解
+```
+public <T> T create(final Class<T> service) {
+		/**
+		 * 验证传入的类对象（类的类对象）是否为接口、以及是否是需要提前验证并加载该类的方法
+		 * 这里说得比较绕，简单点说是，由于 Retrofit 是通过接口进行使用的
+		 * 1、在使用之前需要判断一下传入的 Class 对象是否为接口，不是则抛出异常
+		 * 2、另外还会判断传入的接口是否包含范型，如果包含则抛出异常
+		 * 3、如果接口中还包含接口，还是对内层接口进行判断（套多少都给判断了）
+		 * 4、如果在配置 Retrofit 时，指定提前验证，则会把接口方法的合法性也会判断了
+		 * 
+		 * 具体代码，可以去源码中查看
+		 */
+    validateServiceInterface(service);
+    /**
+     * 通过前面的验证，返回一个代理实例（就是动态代理）
+     * 在运行期，生成接口实现类并调用 InvocationHandler#invoke()
+     */
+    return (T)
+        Proxy.newProxyInstance(
+            service.getClassLoader(),
+            new Class<?>[] {service},
+            new InvocationHandler() {
+            	// 判断调用平台信息
+              private final Platform platform = Platform.get();
+              private final Object[] emptyArgs = new Object[0];
+
+              @Override
+              public @Nullable Object invoke(Object proxy, Method method, @Nullable Object[] args)
+                  throws Throwable {
+                // If the method is a method from Object then defer to normal invocation.
+                // 刚好有英文解释，直译就是如果是 Object 的方法默认调用它的实现
+                if (method.getDeclaringClass() == Object.class) {
+                  return method.invoke(this, args);
+                }
+                args = args != null ? args : emptyArgs;
+                /**
+                 * 三元表达式
+                 * 如果是 java8 并带有 default 关键字修饰的方法，按照 default 的方法执行
+                 * 否则调用 loadServiceMethod 方法，通过该方法返回的实例调用 invoke 并传入参数
+                 */
+                return platform.isDefaultMethod(method)
+                    ? platform.invokeDefaultMethod(method, service, proxy, args)
+                    : loadServiceMethod(method).invoke(args);
+              }
+            });
+  }
+
+/**
+ * serviceMethodCache 是一个 ConcurrentHashMap，记录 method 对应的 ServiceMethod
+ * 1、根据传入的 method 从缓存中获取，有则返回
+ * 2、上锁并通过 ServiceMethod.parseAnnotations() 创建示例后存到缓存中
+ * 所以需要看看 SerivceMethod 是什么
+ */
+ServiceMethod<?> loadServiceMethod(Method method) {
+    ServiceMethod<?> result = serviceMethodCache.get(method);
+    if (result != null) return result;
+
+    synchronized (serviceMethodCache) {
+      result = serviceMethodCache.get(method);
+      if (result == null) {
+        result = ServiceMethod.parseAnnotations(this, method);
+        serviceMethodCache.put(method, result);
+      }
+    }
+    return result;
+  }
+```
+到这里，追踪到的是通过 Retrofit#create 可以拿到接口的代理对象，当这个代理对象的方法被执行后，就是执行的 ServiceMethod#invode 并返回接口方法中的范型。那再看 ServiceMethod
+```
+
+```
 
 
 
