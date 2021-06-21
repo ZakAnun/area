@@ -21,8 +21,8 @@ categories:
  * 由开发者自己定义的接口
  */
 public interface GitHubService {
-	@GET("users/{user}/repos")
-	Call<List<Repo>> listRepos(@Path("user") String user);
+  @GET("users/{user}/repos")
+  Call<List<Repo>> listRepos(@Path("user") String user);
 }
 
 /**
@@ -109,7 +109,7 @@ Call<List<Widget>> widgetList();
 
 @Headers({
   "Accept: application/vnd.github.v3.full+json",
-	"User-Agent: Retrofit-Sample-App"
+  "User-Agent: Retrofit-Sample-App"
 })
 @GET("users/{username}")
 Call<User> getUser(@Path("username") String username);
@@ -133,10 +133,10 @@ Retrofit 是将 API 接口转换为可调用对象的类。默认情况下，Ret
 
 // 配置
 Retrofit retrofit = new Retrofit.Builder()
-		.baseUrl("https://api.github.com/")
-		.addConverterFactory(GsonConverterFactory.create())
-		.build();
-		
+    .baseUrl("https://api.github.com/")
+    .addConverterFactory(GsonConverterFactory.create())
+    .build();
+    
 // 创建与使用
 GitHubService service = retrofit.create(GitHubService.class);
 service.listRepos("zak");
@@ -152,16 +152,16 @@ service.listRepos("zak");
 先看 Retrofit 的配置，通过构造 Builder 传入所需的参数，那这个就先跳过。再看使用，通过 Retrofit 的实例，调用 create(*.class) 并传入接口的 class 对象（Class 对象用于记录类的成员、接口等信息），从 create 开始逐步了解
 ```
 public <T> T create(final Class<T> service) {
-		/**
-		 * 验证传入的类对象（类的类对象）是否为接口、以及是否是需要提前验证并加载该类的方法
-		 * 这里说得比较绕，简单点说是，由于 Retrofit 是通过接口进行使用的
-		 * 1、在使用之前需要判断一下传入的 Class 对象是否为接口，不是则抛出异常
-		 * 2、另外还会判断传入的接口是否包含范型，如果包含则抛出异常
-		 * 3、如果接口中还包含接口，还是对内层接口进行判断（套多少都给判断了）
-		 * 4、如果在配置 Retrofit 时，指定提前验证，则会把接口方法的合法性也会判断了
-		 * 
-		 * 具体代码，可以去源码中查看
-		 */
+    /**
+     * 验证传入的类对象（类的类对象）是否为接口、以及是否是需要提前验证并加载该类的方法
+     * 这里说得比较绕，简单点说是，由于 Retrofit 是通过接口进行使用的
+     * 1、在使用之前需要判断一下传入的 Class 对象是否为接口，不是则抛出异常
+     * 2、另外还会判断传入的接口是否包含范型，如果包含则抛出异常
+     * 3、如果接口中还包含接口，还是对内层接口进行判断（套多少都给判断了）
+     * 4、如果在配置 Retrofit 时，指定提前验证，则会把接口方法的合法性也会判断了
+     * 
+     * 具体代码，可以去源码中查看
+    */
     validateServiceInterface(service);
     /**
      * 通过前面的验证，返回一个代理实例（就是动态代理）
@@ -172,7 +172,7 @@ public <T> T create(final Class<T> service) {
             service.getClassLoader(),
             new Class<?>[] {service},
             new InvocationHandler() {
-            	// 判断调用平台信息
+              // 判断调用平台信息
               private final Platform platform = Platform.get();
               private final Object[] emptyArgs = new Object[0];
 
@@ -217,16 +217,385 @@ ServiceMethod<?> loadServiceMethod(Method method) {
     return result;
   }
 ```
-到这里，追踪到的是通过 Retrofit#create 可以拿到接口的代理对象，当这个代理对象的方法被执行后，就是执行的 ServiceMethod#invode 并返回接口方法中的范型。那再看 ServiceMethod
+到这里，追踪到的是通过 Retrofit#create 可以拿到接口的代理对象，当这个代理对象的方法被执行后，就是执行的 ServiceMethod#invode 并返回接口方法中的范型。那再看 ServiceMethod，ServiceMethod 是一个抽象类，包含一个静态方法 parseAnnotations 和一个抽象的 invoke()
 ```
+abstract class ServiceMethod<T> {
+  /**
+   * 首先直观上，这个方法会返回一个 HttpServiceMethod
+   * 1、拿到 RequestFactory（请求工厂）
+   * 2、判断入参的方法返回值类型是否被支持和以及是否为空，不支持或为空都会抛异常
+   */
+  static <T> ServiceMethod<T> parseAnnotations(Retrofit retrofit, Method method) {
+    RequestFactory requestFactory = RequestFactory.parseAnnotations(retrofit, method);
 
+    Type returnType = method.getGenericReturnType();
+    if (Utils.hasUnresolvableType(returnType)) {
+      throw methodError(
+          method,
+          "Method return type must not include a type variable or wildcard: %s",
+          returnType);
+    }
+    if (returnType == void.class) {
+      throw methodError(method, "Service methods cannot return void.");
+    }
+
+    return HttpServiceMethod.parseAnnotations(retrofit, method, requestFactory);
+  }
+
+  /**
+   * 由于这个方法是抽象的，所以需要看实现它的地方
+   */
+  abstract @Nullable T invoke(Object[] args);
+}
+
+// 分割线
+
+abstract class HttpServiceMethod<ResponseT, ReturnT> extends ServiceMethod<ReturnT> {
+  ...
+	
+  /**
+   * HttpServiceMethod 中的实现
+   * 1、构造一个 OkHttpCall
+   * 2、适配这个 call 对象（主要是适配 Kotlin 的协程）
+   * 最终会返回这个 Call 对象，也就是在接口中方法的返回值类型
+   * 内部类 CallAdapted、SuspendForResponse、 SuspendForBody 这三个类会重写这个方法，同时这三个类也是 HttpServiceMethod
+   * 从而可以看出这些根据是否为协程作出了兼容
+   * 然后可以看到 adapt 的实现有好多（如 RxJava2CallAdapter..）是用于将 Call 对象转换成对应 API，以便调用
+   * 而这个 Adapter 的来源就是创建 Retrofit 时可以传入的
+   * OkHttpCall -> HttpServiceMethod
+   * 调用在 HttpServiceMethod createCallAdapter -> retrofit.callAdapter
+   * Retrofit 维护一个 callAdapterFactories，通过 method（接口方法） 的返回类型进行判断
+   * 另外这个 adapt 方法最终都是会执行 call.equeue() 因此，下一步就看看 call.equeue() 做了些什么
+   */
+  @Override
+  final @Nullable ReturnT invoke(Object[] args) {
+    Call<ResponseT> call = new OkHttpCall<>(requestFactory, args, callFactory, responseConverter);
+    return adapt(call, args);
+  }
+  
+  ...
+}
 ```
+分析到 call.equeue()，也就是 OkHttpCall.equeue()
+```
+@Override
+  public void enqueue(final Callback<T> callback) {
+    Objects.requireNonNull(callback, "callback == null");
 
+    okhttp3.Call call;
+    Throwable failure;
 
+    synchronized (this) {
+      if (executed) throw new IllegalStateException("Already executed.");
+      executed = true;
 
+      call = rawCall;
+      failure = creationFailure;
+      if (call == null && failure == null) {
+        try {
+          // 创建 okhttp3.Call 对象
+          call = rawCall = createRawCall();
+        } catch (Throwable t) {
+          throwIfFatal(t);
+          failure = creationFailure = t;
+        }
+      }
+    }
 
+    if (failure != null) {
+      // 构建 okhttp3.Call 异常通过失败的回调返回
+      callback.onFailure(this, failure);
+      return;
+    }
 
+    if (canceled) {
+      // 属于 okhttp3 中的方法，到 okhttp3 的源码解析时再深入
+      call.cancel();
+    }
 
+    // 调用 okhttp3.Call#enqueue() 进行网络请求
+    call.enqueue(
+        new okhttp3.Callback() {
+          @Override
+          public void onResponse(okhttp3.Call call, okhttp3.Response rawResponse) {
+            Response<T> response;
+            try {
+              // 解析网络响应
+              response = parseResponse(rawResponse);
+            } catch (Throwable e) {
+              throwIfFatal(e);
+              callFailure(e);
+              return;
+            }
+
+            try {
+              // 回调成功结果
+              callback.onResponse(OkHttpCall.this, response);
+            } catch (Throwable t) {
+              throwIfFatal(t);
+              t.printStackTrace(); // TODO this is not great
+            }
+          }
+
+          @Override
+          public void onFailure(okhttp3.Call call, IOException e) {
+            callFailure(e);
+          }
+
+          private void callFailure(Throwable e) {
+            try {
+              // 回调失败结果
+              callback.onFailure(OkHttpCall.this, e);
+            } catch (Throwable t) {
+              throwIfFatal(t);
+              t.printStackTrace(); // TODO this is not great
+            }
+          }
+        });
+  }
+```
+在 enqueue() 代码中，有两个地方需要继续研究<br/>
+1、通过 `call = rawCall = createRawCall();` 创建 okhttp3.Call 对象的实现<br/>
+2、通过 `response = parseResponse(rawResponse);` 解析响应数据的实现<br/>
+先看 okhttp3.Call 对象的创建
+```
+private okhttp3.Call createRawCall() throws IOException {
+    /**
+     * 通过 callFactory.newCall 创建一个 okhttp3.call 对象
+     * 这个 callFactory 来源于 OkHttpCall 的构造方法
+     * 而 OkHttpCall 的构造在 HttpServiceMethod#invoke() 中创建（在调用具体接口方法时）
+     * 在 invoke 中的 callFactory 是通过 HttpServiceMethod 构造时传入
+     * HttpServiceMethod 的构造，是在 parseAnnotations 的过程中构造的（也就是构造前面说的重写 adapt() 的子类）
+     * parseAnnotations 中无论创建 CallAdapted、SuspendForResponse 还是 SuspendForBody 都传入了 callFactory，而这个 callFactory 通过 Retrofit#Builder 在构建的时候传入（如果不传，默认是 OkHttpClient）
+     * 得出结论 callFactory 实际上是一个 OkHttpClient，也就是通过 OkHttpClient 创建了一个 Call 对象
+     * ---
+     * 接下来在 newCall() 中传入了 requestFactory.create(args)，这个方法是创建请求对象（okhttp3.Request）
+     * 这个 requestFactory 是在 ServiceMethod#invoke 通过 RequestFactory.parseAnnotations() 创建的
+     */
+    okhttp3.Call call = callFactory.newCall(requestFactory.create(args));
+    if (call == null) {
+      throw new NullPointerException("Call.Factory returned null.");
+    }
+    return call;
+  }
+```
+另起一段，看看 RequestFactory 的代码
+```
+final class RequestFactory {
+  static RequestFactory parseAnnotations(Retrofit retrofit, Method method) {
+    // 通过 Builder#build 返回实例
+    return new Builder(retrofit, method).build();
+  }
+  
+  ...
+  
+  RequestFactory build() {
+    
+    // 这里的方法都是对接口方法注解的解析
+    // 遍历注解并解析得到 httpMethod、hasBody、params 等信息
+    // parseMethonAnnotation 解析方法注解
+    // parseHeader 解析 Header 注解
+    // parseParameter 解析参数
+    // parseParameterAnnotation 解析注解参数
+    
+    // 经过解析并且解析无误后，就会返回 RequestFactory
+    return builder.build();
+  }
+}
+```
+RequestFactory 在 ServiceMethod#invoke 中已经完成解析操作，在 `callFactory.newCall(requestFactory.create(args))` 时可将参数直接赋值并通过 create() 返回<br/>
+剩下第二点，响应的数据解析实现，接下来看看 OkHttpCall#parseResponse 方法
+```
+Response<T> parseResponse(okhttp3.Response rawResponse) throws IOException {
+    ResponseBody rawBody = rawResponse.body();
+    
+    ...
+    
+    ExceptionCatchingResponseBody catchingBody = new ExceptionCatchingResponseBody(rawBody);
+    try {
+      /*
+       * 最终通过 responseConverter.convert() 将响应的 body 进行转换
+       * 那就再看看 responnseConverter 的来源
+       * 同样通过 OkHttpCall -> HttpServiceMethod
+       * 在 HttpServiceMathod#parseAnnotation 中通过 createResponseConverter() -> retrofit.responseBodyConverter() 获得
+       * 这个方法是通过遍历在 converterFactories 拿到合适的 converter 返回（通过 callAdapter.responseType 确定）
+       * converterFactories 是在 Retrofit#build 中赋值，会添加默认的 coverter 和接收自定义的 converter
+       */
+      T body = responseConverter.convert(catchingBody);
+      return Response.success(body, rawResponse);
+    } catch (RuntimeException e) {
+      // If the underlying source threw an exception, propagate that rather than indicating it was
+      // a runtime exception.
+      catchingBody.throwIfCaught();
+      throw e;
+    }
+  }
+```
+到这里，从开始的调用入口，分析了 callAdapter 的来源以及作用、requestFactory 的来源以及作用、reponseConverter 的来源以及作用、OkHttpCall 的作用，Retrofit 的主体流程就大概了解了，还有个点，在阅读过程中有发现 Retrofit 对 kotlin 的协程做了区分，通过 isKotlinSuspendFunction 来返回 CallAdapted 还是 SuspendForResponse/SuspendForBody，最后来了解一下这块逻辑，顺便看看协程的判断方式<br/>
+首先需要明确，kotlin 使用 suspend 关键字修改的方法最终生成一个类的静态方法，这个静态方法最后一个参数的类型是 Continuation（这个接口解释，暂停点后的延续）<br/>
+在 HttpServiceMethod#parseAnnotations() 中，有关协程的部分
+```
+static <ResponseT, ReturnT> HttpServiceMethod<ResponseT, ReturnT> parseAnnotations(
+      Retrofit retrofit, Method method, RequestFactory requestFactory) {
+    // 获取是否为协程函数
+    boolean isKotlinSuspendFunction = requestFactory.isKotlinSuspendFunction;
+    boolean continuationWantsResponse = false;
+    boolean continuationBodyNullable = false;
+
+    Annotation[] annotations = method.getAnnotations();
+    Type adapterType;
+    if (isKotlinSuspendFunction) {
+      Type[] parameterTypes = method.getGenericParameterTypes();
+      Type responseType =
+          Utils.getParameterLowerBound(
+              0, (ParameterizedType) parameterTypes[parameterTypes.length - 1]);
+      if (getRawType(responseType) == Response.class && responseType instanceof ParameterizedType) {
+        // Unwrap the actual body type from Response<T>.
+        responseType = Utils.getParameterUpperBound(0, (ParameterizedType) responseType);
+        // 是协程函数将 continuationWantsResponse 置为 true
+        continuationWantsResponse = true;
+      } else {
+        // TODO figure out if type is nullable or not
+        // Metadata metadata = method.getDeclaringClass().getAnnotation(Metadata.class)
+        // Find the entry for method
+        // Determine if return type is nullable or not
+      }
+
+      adapterType = new Utils.ParameterizedTypeImpl(null, Call.class, responseType);
+      annotations = SkipCallbackExecutorImpl.ensurePresent(annotations);
+    } else {
+      adapterType = method.getGenericReturnType();
+    }
+
+    CallAdapter<ResponseT, ReturnT> callAdapter =
+        createCallAdapter(retrofit, method, adapterType, annotations);
+    Type responseType = callAdapter.responseType();
+    if (responseType == okhttp3.Response.class) {
+      throw methodError(
+          method,
+          "'"
+              + getRawType(responseType).getName()
+              + "' is not a valid response body type. Did you mean ResponseBody?");
+    }
+    if (responseType == Response.class) {
+      throw methodError(method, "Response must include generic type (e.g., Response<String>)");
+    }
+    // TODO support Unit for Kotlin?
+    if (requestFactory.httpMethod.equals("HEAD") && !Void.class.equals(responseType)) {
+      throw methodError(method, "HEAD method must use Void as response type.");
+    }
+
+    Converter<ResponseBody, ResponseT> responseConverter =
+        createResponseConverter(retrofit, method, responseType);
+
+    okhttp3.Call.Factory callFactory = retrofit.callFactory;
+    if (!isKotlinSuspendFunction) {
+      return new CallAdapted<>(requestFactory, callFactory, responseConverter, callAdapter);
+    } else if (continuationWantsResponse) {
+      //noinspection unchecked Kotlin compiler guarantees ReturnT to be Object.
+      // 返回协程响应
+      return (HttpServiceMethod<ResponseT, ReturnT>)
+          new SuspendForResponse<>(
+              requestFactory,
+              callFactory,
+              responseConverter,
+              (CallAdapter<ResponseT, Call<ResponseT>>) callAdapter);
+    } else {
+      //noinspection unchecked Kotlin compiler guarantees ReturnT to be Object.
+      return (HttpServiceMethod<ResponseT, ReturnT>)
+          new SuspendForBody<>(
+              requestFactory,
+              callFactory,
+              responseConverter,
+              (CallAdapter<ResponseT, Call<ResponseT>>) callAdapter,
+              continuationBodyNullable);
+    }
+  }
+```
+从上面的代码可以得知 Retrofit 通过 isKotlinSuspendFunction 来判断传入的 Method 是否为协程函数，那就看看它是怎么确认这个值的，在 RequestFactory 的 parseParameter 是对方法进行解析，首先遍历解析参数的注解（@Path、@Query、@Field），下面看看这个方法
+```
+private @Nullable ParameterHandler<?> parseParameter(
+        int p, Type parameterType, @Nullable Annotation[] annotations, boolean allowContinuation) {
+      ParameterHandler<?> result = null;
+      // 解析注解
+      if (annotations != null) {
+        for (Annotation annotation : annotations) {
+          ParameterHandler<?> annotationAction =
+              parseParameterAnnotation(p, parameterType, annotations, annotation);
+
+          if (annotationAction == null) {
+            continue;
+          }
+
+          if (result != null) {
+            throw parameterError(
+                method, p, "Multiple Retrofit annotations found, only one allowed.");
+          }
+
+          result = annotationAction;
+        }
+      }
+
+      if (result == null) {
+        // 判断最后一个参数（在调用的地方传入的）
+        if (allowContinuation) {
+          try {
+            // 判断参数类型是否为 Continuation 这个接口
+            if (Utils.getRawType(parameterType) == Continuation.class) {
+              // 是的话，就认为是协程函数
+              isKotlinSuspendFunction = true;
+              return null;
+            }
+          } catch (NoClassDefFoundError ignored) {
+          }
+        }
+        throw parameterError(method, p, "No Retrofit annotation found.");
+      }
+
+      return result;
+    }
+```
+了解完 isKotlinSuspendFunction 的来源后，再看看 SuspendResponse 的 adapt() 方法
+```
+static final class SuspendForResponse<ResponseT> extends HttpServiceMethod<ResponseT, Object> {
+    private final CallAdapter<ResponseT, Call<ResponseT>> callAdapter;
+
+    SuspendForResponse(
+        RequestFactory requestFactory,
+        okhttp3.Call.Factory callFactory,
+        Converter<ResponseBody, ResponseT> responseConverter,
+        CallAdapter<ResponseT, Call<ResponseT>> callAdapter) {
+      super(requestFactory, callFactory, responseConverter);
+      this.callAdapter = callAdapter;
+    }
+
+    @Override
+    protected Object adapt(Call<ResponseT> call, Object[] args) {
+      // 调用 callAdapter 的 adapt()
+      call = callAdapter.adapt(call);
+
+      //noinspection unchecked Checked by reflection inside RequestFactory.
+      // 取出最后一个参数并强转为 Continnuation 类型
+      Continuation<Response<ResponseT>> continuation =
+          (Continuation<Response<ResponseT>>) args[args.length - 1];
+
+      // See SuspendForBody for explanation about this try/catch.
+      try {
+        /**
+         * 执行扩展函数 awaitResponse
+         * 这个对 Call 进行了扩展
+         * 结合协程的调用方式调用 Call#equeue
+         * 在 onResponse 中通过 continuation.resume(response) 返回成功回调
+         * 在 onFailure 中通过 continuation.resumeWithExceptionn(t) 返回失败回调
+         */
+        return KotlinExtensions.awaitResponse(call, continuation);
+      } catch (Exception e) {
+        // 出问题则抛出异常
+        return KotlinExtensions.suspendAndThrow(e, continuation);
+      }
+    }
+  }
+```
 
 
 
