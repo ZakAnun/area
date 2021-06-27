@@ -1,5 +1,6 @@
 ---
 title: Retrofit 篇
+display: home
 description: android network
 image: https://picsum.photos/536/354?random&date=2021-05-30
 date: 2021-05-30
