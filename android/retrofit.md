@@ -10,7 +10,17 @@ categories:
   - android
 ---
 
+## 大纲
+* [概述](#概述)
+* [基本用法](#基本用法)
+* [配置](#配置)
+* [基础篇小结](#基础篇小结)
+* [源码篇](#源码篇)
+* [源码篇小结](#源码篇小结)
+* [参考资料](#参考资料)
+
 ### 概述
+
 在开发的过程中，客户端经常需要进行网络通信，以达到与服务端的数据交互。本篇从 Retrofit 这个库开始了解网络通信的基本流程。官方文档中对 Retrofit 的介绍: `turns your HTTP API into a Java interface.` 意思是将 HTTP 的 API 转换为 Java 接口。那在实际使用中我们就可以通过这个转换后的 Java 接口进行网络请求了。首先来简单阅读以下文档（了解一个库最便捷的方式），基本篇
 
 ### 基本用法
@@ -45,7 +55,6 @@ Call<List<Repo>> repos = service.listRepos("octocat");
 - 可以将对象转换成请求体（如: JSON，协议缓冲）
 - 多部分请求体和文件上传
 
-### 基础 API
 **URL 声明**<br/>
 url 声明可以动态更新可以被替换的部分，在注解中可以被替换的部分需要被 { 和 } 包裹，替换的值需要使用 @Path 进行声明，同时也支持添加请求参数
 
@@ -99,7 +108,7 @@ Call<User> updateUser(@Field("first_name") String first, @Field("last_name") Str
 Call<User> updateUser(@Part("photo") RequestBody photo, @Part("description") RequestBody description);
 ```
 **请求头声明**<br/>
-开发者可以使用 @Headers 来设置头部信息，头部信息不回被重写，所有头部信息都会包含在请求头中。同样的，请求头也可以使用 @Header 来动态添加，如果 @Header 传入的值为 null 的时候，那他就会被省略，如果不想被省略可以使用 toString 避免传入 null
+开发者可以使用 @Headers 来设置头部信息，头部信息不会被重写，所有头部信息都会包含在请求头中。同样的，请求头也可以使用 @Header 来动态添加，如果 @Header 传入的值为 null 的时候，那他就会被省略，如果不想被省略可以使用 toString 避免传入 null
 ```
 // 示例代码
 
@@ -124,7 +133,7 @@ Call<User> getUser(@HeaderMap Map<String, String> headers)
 Call 实例可以被同步执行和异步执行，每个 Call 示例只会被使用一次，但使用 clone() 将创建一个新的能够被使用的示例
 在 Android 中，网络回调将会在主线程被执行。在 JVM 中，回调将会在同一个线程中被执行
 
-### Retrofit 配置
+### 配置
 Retrofit 是将 API 接口转换为可调用对象的类。默认情况下，Retrofit 将为使用的平台提供合理的默认配置，同时支持自定义。
 默认情况下，Retrofit 只能将 HTTP 响应体反序列化为 OkHttp 的 ResponseBody 类型，并且只能接收 @Body 的 RequestBody 类型。
 但添加 Converters 可以支持其它的类型，提供以下转换器（Gson、Jackson、Moshi、Protoful、Wire、Simple XML、JAXB、Scalars）
@@ -148,7 +157,7 @@ service.listRepos("zak");
 
 ### 源码篇
 **基本方式**<br/>
-源码的阅读，一般先从调用入口开始追踪，逐步捋清调用链，如果从调用入口的方法中获取到的信息比较少，那就从构造的方法开始着手。总之创建、配置、调用，基本上就是这些（有些细节实现的地方，了解阶段应该跳过，不要阻塞对整个的了解~）。
+源码的阅读，一般先从调用入口开始追踪，逐步捋清调用链，如果从调用入口的方法中获取到的信息比较少，那就从构造的方法开始着手。总之创建、配置、调用，基本上就是这些（有些细节实现的地方，了解阶段应该跳过，不要阻塞对整个流程的了解~）。
 先看 Retrofit 的配置，通过构造 Builder 传入所需的参数，那这个就先跳过。再看使用，通过 Retrofit 的实例，调用 create(*.class) 并传入接口的 class 对象（Class 对象用于记录类的成员、接口等信息），从 create 开始逐步了解
 ```
 public <T> T create(final Class<T> service) {
@@ -200,7 +209,7 @@ public <T> T create(final Class<T> service) {
 /**
  * serviceMethodCache 是一个 ConcurrentHashMap，记录 method 对应的 ServiceMethod
  * 1、根据传入的 method 从缓存中获取，有则返回
- * 2、上锁并通过 ServiceMethod.parseAnnotations() 创建示例后存到缓存中
+ * 2、上锁并通过 ServiceMethod.parseAnnotations() 创建实例后存到缓存中
  * 所以需要看看 SerivceMethod 是什么
  */
 ServiceMethod<?> loadServiceMethod(Method method) {
@@ -258,7 +267,7 @@ abstract class HttpServiceMethod<ResponseT, ReturnT> extends ServiceMethod<Retur
    * 1、构造一个 OkHttpCall
    * 2、适配这个 call 对象（主要是适配 Kotlin 的协程）
    * 最终会返回这个 Call 对象，也就是在接口中方法的返回值类型
-   * 内部类 CallAdapted、SuspendForResponse、 SuspendForBody 这三个类会重写这个方法，同时这三个类也是 HttpServiceMethod
+   * 内部类 CallAdapted、SuspendForResponse、SuspendForBody 这三个类会重写这个方法，同时这三个类也是 HttpServiceMethod
    * 从而可以看出这些根据是否为协程作出了兼容
    * 然后可以看到 adapt 的实现有好多（如 RxJava2CallAdapter..）是用于将 Call 对象转换成对应 API，以便调用
    * 而这个 Adapter 的来源就是创建 Retrofit 时可以传入的
@@ -596,11 +605,36 @@ static final class SuspendForResponse<ResponseT> extends HttpServiceMethod<Respo
     }
   }
 ```
+### 源码篇小结
+经过上面的阅读路径基本上了解 Retrofit 的流程
+**API 总结**<br/>
+Retrofit: 使用动态代理配合 Builder 构建出对应接口的对象，支持传入 RequestFactory、CallAdapter、Converter 同时也有会默认实现<br/>
+Platform: 用于调用平台的判断，区分 java8、Android<br/>
+ServiceMethod: 接口方法的抽象<br/>
+RequestFactory: 请求工厂，用于解析接口方法中的注解，包括方法注解、方法参数注解等<br/>
+HttpServiceMethod: Http 接口方法，继承自 ServiceMethod，用于创建并适配请求（CallAdapter），其中有兼容协程的方法（默认返回 CallAdapted，是协程会返回 SuspendForResponse / SuspendForBody）这三个都继承自 HttpServiceMethod 且是它的内部类<br/>
+CallAdapter: 通过判断返回值类型适配不同的请求，可以通过 Builder#addCallAdapterFactory 添加自定义的 CallAdapter<br/>
+OkHttpCall: 具体的请求封装，在这里调用了 okhttp3 相关的 api 发起实际的网络请求<br/>
+Converter: 响应体转换器，默认是 ResponseBody，常用的有 GsonResponseBodyConverter<br/>
+CallBack: 响应回调<br/>
+**调用流程**<br/>
+在调用接口方法进行请求时，首先接口实例的 InvocationHandler#invoke 会被调用，然后看 Retrofit#serviceMethodCache 中有没有缓存的接口实例，没有就创建，有就先解析注解参数，然后调用 HttpServiceMethod#invoke 适配请求（根据接口方法的返回值类型进行适配），默认是 CallAdapted，协程则是 SuspendForResponse / SuspendForBody，在构建这些类的时候，会将 Converter 也构建完毕，构建完毕后，会调用 adapt()，这个方法会调用 OkhttpCall 的 enqueue 进行实际的网络请求，收到响应后会通过 Converter 解析返回的响应数据并回调 CallBack 接口<br/>
+**问题**<br/>
+1、方法的注解什么时候解析，怎样解析
+- 在创建 HttpServiceMthod 实例之前进行解析
+- 通过 RequestFactory 的静态方法 parseAnnotations() 创建对象并在 Builder 构建之前解析完毕
+2、Converter 的转换过程
+- 在 OkHttpCall#equeue 的 onResponse 回调中调用 parseResponse，其中通过 responseConverter 对响应数据进行解析
+- responseConverter 在 converterFactories 中通过返回值类型匹配
+3、CallAdapter 的适配过程
+- 在 callAdapterFactories 通过接口方法返回值类型进行匹配
+4、如何支持 Kotlin 协程的 suspend 挂起函数
+- RequestFactory 解析方法的参数来判断（参数最后一个类型为 Continuation.class）RequestFactory#isKotlinSuspendFunction 即认为是 kotlin 的 suspend 函数
+- 通过 RequestFactory#isKotlinSuspendFunction 这个值在 HttpServiceMethod 中就会返回对应的 SuspendForResponse / SuspendForBody，其中的 adapt() 通过 KotlinExtensions.awaitResponse 来完成协程的执行并通过 Callback 进行回调
 
-
-
-
-
+### 参考资料
+[官方文档](https://square.github.io/retrofit/)
+[AboBack - 一定能看懂的 Retrofit 最详细的源码解析！](https://juejin.cn/post/6869584323079569415#heading-29)
 
 
 
