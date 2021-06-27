@@ -22,7 +22,8 @@ categories:
 
 ### 概述
 
-在开发的过程中，客户端经常需要进行网络通信，以达到与服务端的数据交互。本篇从 Retrofit 这个库开始了解网络通信的基本流程。官方文档中对 Retrofit 的介绍: `turns your HTTP API into a Java interface.` 意思是将 HTTP 的 API 转换为 Java 接口。那在实际使用中我们就可以通过这个转换后的 Java 接口进行网络请求了。首先来简单阅读以下文档（了解一个库最便捷的方式），基本篇
+在开发的过程中，客户端经常需要进行网络通信，以达到与服务端的数据交互。本篇从 Retrofit 这个库开始了解网络通信的基本流程。官方文档中对 Retrofit 的介绍: `turns your HTTP API into a Java interface.` 意思是将 HTTP 的 API 转换为 Java 接口。那在实际使用中我们就可以通过这个转换后的 Java 接口进行网络请求了。<br/>
+另外阅读 Retrofit 需要一点前置知识点就是[动态代理](https://github.com/ZakAnun/java-basic/blob/master/src/proxydemo/Main.java)和[注解](https://github.com/ZakAnun/java-basic/blob/master/src/enumdemo/Operator.java)（文章在[参考资料](#参考资料)）
 
 ### 基本用法
 
@@ -607,7 +608,7 @@ static final class SuspendForResponse<ResponseT> extends HttpServiceMethod<Respo
   }
 ```
 ### 源码篇小结
-经过上面的阅读路径基本上了解 Retrofit 的流程
+经过上面的阅读路径基本上了解 Retrofit 的流程<br/>
 **API 总结**<br/>
 Retrofit: 使用动态代理配合 Builder 构建出对应接口的对象，支持传入 RequestFactory、CallAdapter、Converter 同时也有会默认实现<br/>
 Platform: 用于调用平台的判断，区分 java8、Android<br/>
@@ -624,18 +625,22 @@ CallBack: 响应回调<br/>
 1、方法的注解什么时候解析，怎样解析
 - 在创建 HttpServiceMthod 实例之前进行解析
 - 通过 RequestFactory 的静态方法 parseAnnotations() 创建对象并在 Builder 构建之前解析完毕
+
 2、Converter 的转换过程
 - 在 OkHttpCall#equeue 的 onResponse 回调中调用 parseResponse，其中通过 responseConverter 对响应数据进行解析
 - responseConverter 在 converterFactories 中通过返回值类型匹配
+
 3、CallAdapter 的适配过程
 - 在 callAdapterFactories 通过接口方法返回值类型进行匹配
+
 4、如何支持 Kotlin 协程的 suspend 挂起函数
 - RequestFactory 解析方法的参数来判断（参数最后一个类型为 Continuation.class）RequestFactory#isKotlinSuspendFunction 即认为是 kotlin 的 suspend 函数
 - 通过 RequestFactory#isKotlinSuspendFunction 这个值在 HttpServiceMethod 中就会返回对应的 SuspendForResponse / SuspendForBody，其中的 adapt() 通过 KotlinExtensions.awaitResponse 来完成协程的执行并通过 Callback 进行回调
 
 ### 参考资料
-[官方文档](https://square.github.io/retrofit/)
-[AboBack - 一定能看懂的 Retrofit 最详细的源码解析！](https://juejin.cn/post/6869584323079569415#heading-29)
+[官方文档](https://square.github.io/retrofit/)<br/>
+[AboBack - 一定能看懂的 Retrofit 最详细的源码解析！](https://juejin.cn/post/6869584323079569415#heading-29)<br/>
+[从一道面试题开始说起 枚举、动态代理的原理](https://blog.csdn.net/lmj623565791/article/details/79278864)<br/>
 
 
 
