@@ -12,20 +12,25 @@ categories:
 ---
 
 ## 大纲
+
+[掘金](https://juejin.cn/post/6978445924016226318)
+[CSDN](https://blog.csdn.net/Lin_For_Game/article/details/118279243?spm=1001.2014.3001.5502)
+
 * [概述](#概述)
 * [基本用法](#基本用法)
 * [配置](#配置)
 * [基础篇小结](#基础篇小结)
 * [源码篇](#源码篇)
 * [源码篇小结](#源码篇小结)
+* [思考](#思考)
 * [参考资料](#参考资料)
 
-### 概述
+## 概述
 
 在开发的过程中，客户端经常需要进行网络通信，以达到与服务端的数据交互。本篇从 Retrofit 这个库开始了解网络通信的基本流程。官方文档中对 Retrofit 的介绍: `turns your HTTP API into a Java interface.` 意思是将 HTTP 的 API 转换为 Java 接口。那在实际使用中我们就可以通过这个转换后的 Java 接口进行网络请求了。<br/>
 另外阅读 Retrofit 需要一点前置知识点就是[动态代理](https://github.com/ZakAnun/java-basic/blob/master/src/proxydemo/Main.java)和[注解](https://github.com/ZakAnun/java-basic/blob/master/src/enumdemo/Operator.java)（文章在[参考资料](#参考资料)）
 
-### 基本用法
+## 基本用法
 
 先贴一下官方文档上面的 demo
 ```
@@ -135,7 +140,8 @@ Call<User> getUser(@HeaderMap Map<String, String> headers)
 Call 实例可以被同步执行和异步执行，每个 Call 示例只会被使用一次，但使用 clone() 将创建一个新的能够被使用的示例
 在 Android 中，网络回调将会在主线程被执行。在 JVM 中，回调将会在同一个线程中被执行
 
-### 配置
+## 配置
+
 Retrofit 是将 API 接口转换为可调用对象的类。默认情况下，Retrofit 将为使用的平台提供合理的默认配置，同时支持自定义。
 默认情况下，Retrofit 只能将 HTTP 响应体反序列化为 OkHttp 的 ResponseBody 类型，并且只能接收 @Body 的 RequestBody 类型。
 但添加 Converters 可以支持其它的类型，提供以下转换器（Gson、Jackson、Moshi、Protoful、Wire、Simple XML、JAXB、Scalars）
@@ -154,10 +160,12 @@ service.listRepos("zak");
 ```
 此外，可以继承 Converter.Factory 这个类来自定义转换器来适配开发者的需求
 
-### 基础篇小结
+## 基础篇小结
+
 以上内容，就是 Retrofit 文档里告诉开发者的一些基本用法，这个库目前也是我最常使用的网络请求库了，那必须是简单了解一下它是怎么实现将 HTTP 请求封装成开发者所熟悉使用的接口？又是怎样开启网络请求？带着这俩疑问准备开始源码篇
 
-### 源码篇
+## 源码篇
+
 **基本方式**<br/>
 源码的阅读，一般先从调用入口开始追踪，逐步捋清调用链，如果从调用入口的方法中获取到的信息比较少，那就从构造的方法开始着手。总之创建、配置、调用，基本上就是这些（有些细节实现的地方，了解阶段应该跳过，不要阻塞对整个流程的了解~）。
 先看 Retrofit 的配置，通过构造 Builder 传入所需的参数，那这个就先跳过。再看使用，通过 Retrofit 的实例，调用 create(*.class) 并传入接口的 class 对象（Class 对象用于记录类的成员、接口等信息），从 create 开始逐步了解
@@ -607,7 +615,9 @@ static final class SuspendForResponse<ResponseT> extends HttpServiceMethod<Respo
     }
   }
 ```
-### 源码篇小结
+
+## 源码篇小结
+
 经过上面的阅读路径基本上了解 Retrofit 的流程<br/>
 **API 总结**<br/>
 Retrofit: 使用动态代理配合 Builder 构建出对应接口的对象，支持传入 RequestFactory、CallAdapter、Converter 同时也有会默认实现<br/>
@@ -637,7 +647,12 @@ CallBack: 响应回调<br/>
 - RequestFactory 解析方法的参数来判断（参数最后一个类型为 Continuation.class）RequestFactory#isKotlinSuspendFunction 即认为是 kotlin 的 suspend 函数
 - 通过 RequestFactory#isKotlinSuspendFunction 这个值在 HttpServiceMethod 中就会返回对应的 SuspendForResponse / SuspendForBody，其中的 adapt() 通过 KotlinExtensions.awaitResponse 来完成协程的执行并通过 Callback 进行回调
 
-### 参考资料
+## 思考
+
+了解完 Retrofit 这个库的代码后，发现涉及到的主要技能点都跟 Java 相关，如动态代理、Class 的理解、注解的定义与解析、接口的判断甚至 Kotlin 中协程的判断，这些点都是 Java 中比较优秀的特性，这个库将这些特性娴熟运用，所以使用者会觉得很好用。但是我想要了解的网络相关的流程并没有在这个库中很明显得体现出来，现在可以理解其它文章说的 Retrofit 是将 okhttp 封装了一层后方便开发者使用的库，下一步就了解一下 okhttp 里的流程，看看他是否会将网络请求的流程比较完整地体现出来。
+
+## 参考资料
+
 [官方文档](https://square.github.io/retrofit/)<br/>
 [AboBack - 一定能看懂的 Retrofit 最详细的源码解析！](https://juejin.cn/post/6869584323079569415#heading-29)<br/>
 [从一道面试题开始说起 枚举、动态代理的原理](https://blog.csdn.net/lmj623565791/article/details/79278864)<br/>
