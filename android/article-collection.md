@@ -26,3 +26,11 @@ categories:
 [运行时数据区域包括哪些？](https://blog.csdn.net/qq_40657585/article/details/100659911)
 [你知道 JVM 的方法区是干什么用的吗？](https://zhuanlan.zhihu.com/p/166190558)
 [类的加载过程](https://github.com/Snailclimb/JavaGuide/blob/master/docs/java/jvm/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E8%BF%87%E7%A8%8B.md#%E7%B1%BB%E5%8A%A0%E8%BD%BD%E8%BF%87%E7%A8%8B)
+
+## Android
+[Android AspectJ 详解](https://juejin.cn/post/6844903941054922760)
+[AOP 之 AspectJ 在 Android 中的应用](https://www.jianshu.com/p/80a1e70598fe)
+[深度解读ArrayMap优势与缺陷](http://gityuan.com/2019/01/13/arraymap/)
+[Android Service 生命周期浅析](https://www.jianshu.com/p/cc25fbb5c0b3)
+[JCenter 迁移指南](https://www.jianshu.com/p/4f49bb9e820e)
+[leobert-lan 的 GitBook](https://leobert-lan.github.io/)
