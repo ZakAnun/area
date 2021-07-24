@@ -21,6 +21,8 @@ categories:
 [反射基础知识](https://www.liaoxuefeng.com/wiki/1252599548343744/1264799402020448)
 [注解基础知识](https://www.liaoxuefeng.com/wiki/1252599548343744/1265102413966176)
 [匿名内部类访问的局部变量为什么必须要用 final 修饰](https://blog.csdn.net/luzhensmart/article/details/103366682)
+[Java 内存管理机制](https://www.cnblogs.com/steffen/p/11368018.html)
+[synchronized 关键字原理](https://crossoverjie.top/2018/01/14/Synchronize/)
 
 ## JVM
 [运行时数据区域包括哪些？](https://blog.csdn.net/qq_40657585/article/details/100659911)
@@ -34,3 +36,6 @@ categories:
 [Android Service 生命周期浅析](https://www.jianshu.com/p/cc25fbb5c0b3)
 [JCenter 迁移指南](https://www.jianshu.com/p/4f49bb9e820e)
 [leobert-lan 的 GitBook](https://leobert-lan.github.io/)
+[View 的绘制流程](https://juejin.cn/post/6844903700918435854#heading-21)
+[Android 触摸事件传递机制](https://jsonchao.github.io/2018/10/17/Android%E8%A7%A6%E6%91%B8%E4%BA%8B%E4%BB%B6%E4%BC%A0%E9%80%92%E6%9C%BA%E5%88%B6/)
+[图解 Android 事件分发机制](https://www.jianshu.com/p/e99b5e8bd67b/)
