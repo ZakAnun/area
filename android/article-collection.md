@@ -52,12 +52,16 @@ categories:
 [Gradle 工作流程](https://cloud.tencent.com/developer/article/1032349)
 [requestLayout 和 invalidate 的区别](https://www.jianshu.com/p/5ec0f278e0a3)
 [Android Studio两种签名机制 V1 和 V2 的区别](https://www.jianshu.com/p/2f5b2f1ae05c)
+[setContentView 和 findViewById 的源码解析](https://blog.dio.wtf/post/setcontentview-findviewbyid/#windowfindviewbyid)
+[OnTouchListener、onTouchEvent、onClick 的执行顺序](https://www.jianshu.com/p/7c5bd3b97968)
 
 ## 优化
 [WebView性能优化](https://tech.meituan.com/2017/06/09/webviewperf.html)
 [卡顿、ANR、死锁，线上如何监控？](https://mp.weixin.qq.com/s/iMQCobmNju_wsApe797enQ)
 [Android 跨进程传输超大 bitmap 的实现](https://blog.csdn.net/ylyg050518/article/details/97671874)
 [Android中Https请求如何防止中间人攻击和Charles抓包原理](https://www.jianshu.com/p/1dd77e56cc3c)
+[性能优化：为什么要使用 Sparsearray 和 ArrayMap 替代 HashMap](https://juejin.cn/post/6897892195483779080#heading-3)
+[关于 Android 抓包与反抓包](https://blog.csdn.net/alcoholdi/article/details/106455192)
 
 ## JNI
 [精选Android中高级面试题：性能优化，JNI，设计模式](https://cloud.tencent.com/developer/article/1614270)
