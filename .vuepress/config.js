@@ -26,6 +26,7 @@ module.exports = {
     nav: [
       { text: '首页', link: '/' },
       { text: '安卓', link: '/android/' },
+      { text: 'Flutter', link: '/flutter/' },
       { text: '前端', link: '/web/' },
       { text: '标签', link: '/tag/' },
       { text: '分类', link: '/category/' },
