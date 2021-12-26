@@ -4,6 +4,7 @@ description: 测试首页文章
 image: https://picsum.photos/536/354?random&date=2020-09-10
 date: 2020-09-10
 vssue-title: Show Test Article
+icon: test
 tags:
   - test
 categories:

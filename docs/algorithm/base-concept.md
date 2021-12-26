@@ -4,6 +4,7 @@ description: algorithm base concept
 image: https://picsum.photos/536/354?random&date=2021-03-18
 date: 2021-03-18
 vssue-title: algorithm base concept
+icon: base-concept
 tags:
   - knowledge
 categories:

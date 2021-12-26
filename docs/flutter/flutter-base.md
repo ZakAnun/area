@@ -4,6 +4,7 @@ description: flutter base
 image: https://picsum.photos/536/354?random&date=2021-09-22
 date: 2021-09-22
 vssue-title: flutter base
+icon: flutter-base
 tags:
   - knowledge
 categories:

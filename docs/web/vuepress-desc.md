@@ -5,6 +5,7 @@ description: vuepress basic desc
 image: https://picsum.photos/536/354?random&date=2020-10-15
 date: 2020-10-15
 vssue-title: vuepress basic config
+icon: vuepress-desc
 tags:
   - config
 categories:

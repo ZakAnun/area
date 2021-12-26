@@ -4,6 +4,7 @@ description: android build
 image: https://picsum.photos/536/354?random&date=2020-12-30
 date: 2020-12-30
 vssue-title: android build
+icon: android-build
 tags:
   - knowledge
 categories:

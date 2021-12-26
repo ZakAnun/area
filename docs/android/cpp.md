@@ -4,6 +4,7 @@ description: cpp note
 image: https://picsum.photos/536/354?random&date=2020-12-15
 date: 2020-12-15
 vssue-title: cpp note
+icon: cpp
 tags:
   - knowledge
 categories:

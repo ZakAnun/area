@@ -5,6 +5,7 @@ description: deploy blog desc
 image: https://picsum.photos/536/354?random&date=2020-10-20
 date: 2020-10-20
 vssue-title: deploy blog
+icon: deploy-blog
 tags:
   - config
 categories:

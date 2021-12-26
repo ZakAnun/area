@@ -1,6 +1,7 @@
 ---
 title: 关于我
 article: false
+icon: about
 ---
 
 - 基本信息

@@ -4,6 +4,7 @@ description: to record what I had met in dev flutter
 image: https://picsum.photos/536/354?random&date=2021-11-22
 date: 2021-11-22
 vssue-title: flutter tips
+icon: flutter-record
 tags:
   - knowledge
 categories:

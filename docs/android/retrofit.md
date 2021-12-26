@@ -5,6 +5,7 @@ description: android retrofit
 image: https://picsum.photos/536/354?random&date=2021-05-30
 date: 2021-05-30
 vssue-title: android retrofit
+icon: retrofit
 tags:
   - knowledge
 categories:

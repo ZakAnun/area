@@ -4,6 +4,7 @@ description: review directory
 image: https://picsum.photos/536/354?random&date=2020-10-27
 date: 2020-10-27
 vssue-title: review directory
+icon: review-directory
 tags:
   - knowledge
 categories:

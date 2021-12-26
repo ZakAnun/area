@@ -5,6 +5,7 @@ description: env set up
 image: https://picsum.photos/536/354?random&date=2020-10-13
 date: 2020-10-13
 vssue-title: web env set up
+icon: web-env
 tags:
   - config
 categories:

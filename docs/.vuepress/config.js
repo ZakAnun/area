@@ -49,7 +49,7 @@ module.exports = config({
     editLinks: false,
 
     blog: {
-      intro: "/docs/about/"
+      intro: "/about/about"
     },
 
     footer: {

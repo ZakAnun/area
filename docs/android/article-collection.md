@@ -4,6 +4,7 @@ description: article collection
 image: https://picsum.photos/536/354?random&date=2021-07-05
 date: 2021-07-05
 vssue-title: article collection
+icon: article-collection
 tags:
   - knowledge
 categories:
