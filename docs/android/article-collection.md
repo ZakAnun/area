@@ -55,6 +55,7 @@ categories:
 [Android Studio两种签名机制 V1 和 V2 的区别](https://www.jianshu.com/p/2f5b2f1ae05c)<br/>
 [setContentView 和 findViewById 的源码解析](https://blog.dio.wtf/post/setcontentview-findviewbyid/#windowfindviewbyid)<br/>
 [OnTouchListener、onTouchEvent、onClick 的执行顺序](https://www.jianshu.com/p/7c5bd3b97968)<br/>
+[Android 应用启动全流程分析](https://www.jianshu.com/p/37370c1d17fc)<br/>
 
 ## 优化
 [WebView性能优化](https://tech.meituan.com/2017/06/09/webviewperf.html)<br/>
